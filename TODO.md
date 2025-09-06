@@ -1,6 +1,6 @@
-# TODO List for Tourist Multilingual Chatbot (BYTRON) Enhancements
+# TODO List for Tourist Multilingual Chatbot (BYTRON)
 
-## Backend Enhancements
+## Backend
 - [ ] Set up environment variables (.env file)
 - [ ] Install additional dependencies for API integrations
 - [ ] Create user models (User.js) with MongoDB schema
@@ -17,7 +17,7 @@
 - [ ] Add error handling middleware
 - [ ] Add input validation
 
-## Frontend Enhancements
+## Frontend 
 - [ ] Install additional dependencies (react-router-dom, etc.)
 - [ ] Implement React Router for navigation
 - [ ] Create authentication pages (Login, Signup, Profile)
@@ -33,12 +33,3 @@
 - [ ] Implement responsive design
 - [ ] Add unit tests for components
 
-## General Enhancements
-- [ ] Update CSS for better styling and responsiveness
-- [ ] Add loading spinners and error messages
-- [ ] Implement proper error boundaries
-- [ ] Add accessibility features
-- [ ] Optimize performance
-- [ ] Add offline support (PWA features)
-- [ ] Update README.md with setup instructions
-- [ ] Test all features end-to-end
