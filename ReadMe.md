@@ -74,8 +74,8 @@ tourist-chatbot/
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/<your-username>/tourist-chatbot.git
-cd tourist-chatbot
+# git clone https://github.com/<your-username>/tourist-chatbot.git
+# cd tourist-chatbot
 
 
 cd backend
