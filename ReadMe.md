@@ -45,6 +45,7 @@ Built with **Full-Stack Development (React + Node.js + MongoDB)**, it helps trav
 ---
 
 ## 📂 Project Structure
+```
 tourist-chatbot/
 │
 ├── backend/                # Node.js backend
@@ -65,6 +66,7 @@ tourist-chatbot/
 ├── .env                    # API keys (Google, Zomato, etc.)
 ├── package.json            # Project metadata
 └── README.md               # Project documentation
+```
 
 ---
 
