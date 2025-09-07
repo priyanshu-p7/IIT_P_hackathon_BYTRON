@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🧳 Tourist Chatbot - Modern UI</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: #eef2f7;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .chat-container {
+      width: 100%;
+      max-width: 480px;
+      height: 600px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      background: #4a90e2;
+      padding: 16px;
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+    #chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: thin;
+      scrollbar-color: #4a90e2 #dcdcdc;
+    }
+    #chat::-webkit-scrollbar {
+      width: 8px;
+    }
+    #chat::-webkit-scrollbar-track {
+      background: #dcdcdc;
+    }
+    #chat::-webkit-scrollbar-thumb {
+      background-color: #4a90e2;
+      border-radius: 20px;
+      border: 2px solid #dcdcdc;
+    }
+    .msg {
+      max-width: 70%;
+      padding: 12px 18px;
+      border-radius: 20px;
+      font-size: 1rem;
+      word-wrap: break-word;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      user-select: text;
+      line-height: 1.4;
+    }
+    .user {
+      background: #D1E7FF;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .bot {
+      background: #DCF8C6;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      border: 1px solid #b7df9b;
+    }
+    footer {
+      flex-shrink: 0;
+      display: flex;
+      padding: 16px;
+      gap: 10px;
+      border-top: 1px solid #e3e3e3;
+      background: white;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 14px 16px;
+      font-size: 1rem;
+      border-radius: 30px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus {
+      border-color: #4a90e2;
+      box-shadow: 0 0 5px #4a90e2;
+    }
+    button {
+      background: #4a90e2;
+      border: none;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    button:hover:not(:disabled) {
+      background: #357ABD;
+    }
+    button:disabled {
+      background: #a0c4f8;
+      cursor: not-allowed;
+    }
+    button svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container" role="main" aria-label="Tourist Multilingual Chatbot">
+    <header>🧳 Tourist Multilingual Chatbot</header>
+    <div id="chat" aria-live="polite" aria-relevant="additions"></div>
+    <footer>
+      <input type="text" id="input" placeholder="Type or speak your question..." aria-label="Chat input" autocomplete="off" />
+      <button id="sendBtn" aria-label="Send message" disabled>Send</button>
+      <button id="speakBtn" aria-label="Start voice input" title="Speak">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17.3 11c0 2.68-1.7 4.94-4.1 5.63v2.01h-2.4v-2.01c-2.4-.7-4.1-2.95-4.1-5.63H6c0 3.16 2.07 5.79 5 6.32V21h2v-3.68c2.93-.53 5-3.16 5-6.32h-1.7z"/></svg>
+      </button>
+    </footer>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('sendBtn');
+    const speakBtn = document.getElementById('speakBtn');
+
+    // Enable Send button only if input not empty
+    input.addEventListener('input', () => {
+      sendBtn.disabled = input.value.trim().length === 0;
+    });
+
+    // Add message and scroll down
+    function addMessage(text, from) {
+      const div = document.createElement('div');
+      div.className = 'msg ' + from;
+      div.textContent = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    // Speech Recognition (voice input)
+    function startListening() {
+      if (!('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
+        alert('Speech Recognition not supported in this browser.');
+        return;
+      }
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'hi-IN'; // Change language as needed
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.start();
+
+      recognition.onresult = event => {
+        input.value = event.results[0][0].transcript;
+        sendBtn.disabled = false;
+        input.focus();
+      };
+
+      recognition.onerror = event => {
+        console.error('Speech recognition error:', event.error);
+      };
+    }
+
+    // Text-to-Speech (bot voice)
+    function speak(text, lang = 'en-US') {
+      if (!window.speechSynthesis) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = lang;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Simulated Gemini API call - replace with actual API call
+    async function getGeminiResponse(message) {
+      // For demo, return simple echo delayed
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve("Demo reply: " + message);
+        }, 1000);
+      });
+    }
+
+    // Send message
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, 'user');
+      addMessage('Thinking...', 'bot');
+
+      sendBtn.disabled = true;
+      input.value = '';
+      input.focus();
+
+      const reply = await getGeminiResponse(text);
+
+      // Remove 'Thinking...' placeholder
+      if (chat.lastChild && chat.lastChild.textContent === 'Thinking...') {
+        chat.lastChild.remove();
+      }
+      addMessage(reply, 'bot');
+      speak(reply);
+      sendBtn.disabled = false;
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !sendBtn.disabled) {
+        sendMessage();
+      }
+    });
+    speakBtn.addEventListener('click', startListening);
+
+    // Welcome message on load
+    window.onload = () => {
+      addMessage("Hello! Ask me anything about tourist places.", "bot");
+    };
+  </script>
+</body>
+</html>
