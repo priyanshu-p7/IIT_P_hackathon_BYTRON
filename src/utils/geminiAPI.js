@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const API_KEY = "AIzaSyAMH7kU9SLQB6v_4J99IKQj6d_lwBQal1A";
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 // ✨ Travel-focused Bot Response
