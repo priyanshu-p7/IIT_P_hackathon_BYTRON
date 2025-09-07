@@ -1,17 +1,21 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = "AIzaSyAMH7kU9SLQB6v_4J99IKQj6d_lwBQal1A";
+const API_KEY = "AIzaSyBH_uVq6o4xMS6FqvwRzVhExyvoLgiFEnA";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
-// ✨ Travel-focused Bot Response
-export const generateBotResponse = async (userMessage) => {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+let CHAT_HISTORY = [];
 
-    // 🔹 Stronger prompt to enforce JSON only
-    const prompt = `
+// ✅ Combined response (JSON places + text explanation)
+export const generateBotFullResponse = async (userMessage) => {
+  let places = [];
+  let textResponse = "";
+
+  try {
+    // ====== 1. JSON places response ======
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const jsonPrompt = `
       You are a multilingual AI travel assistant.
-      Respond ONLY with a valid JSON array of places.
+      Respond ONLY with a valid JSON array of places, restaurants, hotels (whichever user is asking about).
       Do not add any text before or after the JSON.
 
       Each place must include:
@@ -24,65 +28,54 @@ export const generateBotResponse = async (userMessage) => {
       - position (array: [latitude, longitude])
 
       User's message: "${userMessage}"
+      Chat history: ${JSON.stringify(CHAT_HISTORY, null, 2)}
 
-      Example response:
-      [
-        {
-          "id": 1,
-          "name": "Eiffel Tower",
-          "description": "Iconic Paris landmark with observation decks.",
-          "rating": 4.8,
-          "image": "https://upload.wikimedia.org/wikipedia/commons/a/a8/Tour_Eiffel_Wikimedia_Commons.jpg",
-          "category": "Attractions",
-          "position": [48.8584, 2.2945]
-        }
-      ]
+      
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text().trim();
+    console.log(CHAT_HISTORY);
+    
+    const jsonResult = await model.generateContent(jsonPrompt);
+    let rawText = jsonResult.response.text().trim();
+    rawText = rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
 
-    // 🔹 Clean possible code block wrappers
-    text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
-
-    let parsed;
     try {
-      parsed = JSON.parse(text);
-
-      // 🔹 Ensure each place has an id
-      parsed = parsed.map((place, idx) => ({
-        id: place.id ?? idx + 1,
-        ...place,
-      }));
-
-      return parsed;
-    } catch (e) {
-      console.error("❌ Failed to parse AI response as JSON:", text);
-      return [];
+      places = JSON.parse(rawText);
+      places = places.map((p, idx) => ({ id: p.id ?? idx + 1, ...p }));
+    } catch (err) {
+      console.error("❌ Failed to parse AI JSON:", rawText);
+      places = [];
     }
-  } catch (error) {
-    console.error("Error generating response:", error);
-    return [];
-  }
-};
 
-// ✨ Translation Helper
-export const translateText = async (text, targetLanguage = "en") => {
-  try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    // ====== 2. Natural text response ======
+    const textPrompt = `
+      You are a *multilingual AI travel assistant*.
+      - Always give accurate, concise, and friendly answers.
+      - Focus on travel-related topics: tourist spots, hotels, restaurants, culture, routes, safety tips, history.
+      - If the question is not about travel, politely redirect the user back to travel-related help.
+      - Use simple sentences (2–6 lines max) and add bullet points if listing places.
+      - Answer in the same language the user is using.
 
-    const prompt = `
-      Translate this text into **${targetLanguage}**.
-      Return only the translated text, no explanations.
-      Text: "${text}"
+      User's message: "${userMessage}"
+      Chat history: ${JSON.stringify(CHAT_HISTORY, null, 2)}
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    return response.text().trim();
+    const textResult = await model.generateContent(textPrompt);
+    textResponse = textResult.response.text();
+    // textResponse = textResponse.replace(/```json/gi, "").replace(/```/g, "").trim();
+
+    // Save both to chat history
+    const historyEntry = {
+      userMessage,
+      textResponse,
+      places,
+      timestamp: new Date(),
+    };
+    CHAT_HISTORY.push(historyEntry);
+
+    return { places, textResponse };
   } catch (error) {
-    console.error("Error translating text:", error);
-    return "⚠️ Sorry, I encountered an error translating the text.";
+    console.error("🔥 Error in generateBotFullResponse:", error);
+    return { places: [], textResponse: "⚠️ Sorry, something went wrong." };
   }
 };

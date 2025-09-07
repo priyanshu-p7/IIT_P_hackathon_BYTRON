@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { generateBotResponse } from "../utils/geminiAPI";
+import { generateBotFullResponse } from "../utils/geminiAPI";
+import ReactMarkdown from "react-markdown";
+
 
 const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
   const [messages, setMessages] = useState([]);
@@ -14,17 +16,26 @@ const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
     try {
       // 🔹 Ask Gemini for places
       const inputWithHistory = `${input} ${messages.map((m) => m.text).join(" ")}`;
-      const places = await generateBotResponse(inputWithHistory);
+      const { places, textResponse } = await generateBotFullResponse(inputWithHistory);
 
       if (Array.isArray(places)) {
         // 🔹 Send places to App -> MapPanel
         onRecommendations(places);
 
+
         // 🔹 Add AI confirmation message
+        if(places.length > 0){
+          setMessages((prev) => [
+            ...prev,
+            { sender: "ai", text: `✅ Found ${places.length} places.` }
+          ]);
+        }
+        
         setMessages((prev) => [
           ...prev,
-          { sender: "ai", text: `✅ Found ${places.length} places.` },
+          { sender: "ai", text: textResponse || "⚠️ Couldn't generate text." }
         ]);
+        setInput("");
       } else {
         setMessages((prev) => [
           ...prev,
@@ -53,7 +64,7 @@ const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
                 : "bg-gray-100 text-gray-900"
               }`}
           >
-            {msg.text}
+            <ReactMarkdown>{msg.text}</ReactMarkdown>
           </div>
         ))}
       </div>
