@@ -37,12 +37,12 @@ const ChatPanel = ({ selectedLanguage }) => {
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const quickActions = [
-    { icon: AlertTriangle, label: 'Emergency Help', color: 'bg-red-600 hover:bg-red-700' },
-    { icon: Globe, label: 'Translate', color: 'bg-emerald-600 hover:bg-emerald-700' },
-    { icon: MapPin, label: 'Popular Attractions', color: 'bg-blue-600 hover:bg-blue-700' },
-    { icon: Calendar, label: 'Book Services', color: 'bg-amber-600 hover:bg-amber-700' },
-  ];
+  // const quickActions = [
+  //   { icon: AlertTriangle, label: 'Emergency Help', color: 'bg-red-600 hover:bg-red-700' },
+  //   { icon: Globe, label: 'Translate', color: 'bg-emerald-600 hover:bg-emerald-700' },
+  //   { icon: MapPin, label: 'Popular Attractions', color: 'bg-blue-600 hover:bg-blue-700' },
+  //   { icon: Calendar, label: 'Book Services', color: 'bg-amber-600 hover:bg-amber-700' },
+  // ];
 
   const handleQuickAction = async (label) => {
     if (label === 'Translate') {
@@ -154,7 +154,7 @@ const ChatPanel = ({ selectedLanguage }) => {
 
       {/* Quick Actions */}
       <div className="p-4 border-t border-gray-200">
-        <div className="grid grid-cols-2 gap-2 mb-4">
+        {/* <div className="grid grid-cols-2 gap-2 mb-4">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
             return (
@@ -168,7 +168,7 @@ const ChatPanel = ({ selectedLanguage }) => {
               </button>
             );
           })}
-        </div>
+        </div> */}
 
         {/* Message Input */}
         <div className="flex space-x-2">
