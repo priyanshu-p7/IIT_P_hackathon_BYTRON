@@ -103,3 +103,128 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yatra Mitra – Your Tourist Guide Bot</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: "Segoe UI", Arial, sans-serif;
+      overflow-x: hidden;
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .explore-btn {
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      background: #ffdd00;
+      color: #222;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .explore-btn:hover {
+      background: #ffaa00;
+      color: white;
+    }
+
+    /* Footer */
+    footer {
+      background: #111;
+      color: #bbb;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Background */
+    #vanta-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div id="vanta-bg"></div>
+    <div class="hero-content">
+      <h1>Welcome to Yatra Mitra</h1>
+      <p>Your AI-powered Tourist Guide – Explore destinations, restaurants, and attractions around the world.</p>
+      <button class="explore-btn" onclick="exploreNow()">Explore Now</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Yatra Mitra | Your Travel Companion</p>
+    <p>Contact: yatramitra@gmail.com</p>
+  </footer>
+
+  <!-- Vanta.js + Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.globe.min.js"></script>
+
+  <script>
+    VANTA.GLOBE({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0xffdd00,          // globe dots (warm yellow for travel)
+      color2: 0xff6b6b,         // secondary accent (orange/red vibe)
+      backgroundColor: 0x002147 // deep blue background for elegance
+    });
+
+    function exploreNow() {
+      alert("Exploration feature coming soon 🚀");
+    }
+  </script>
+</body>
+</html>
