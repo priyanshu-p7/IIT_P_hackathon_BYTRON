@@ -26,6 +26,7 @@ export const generateBotResponse = async (userMessage) => {
 
   } catch (error) {
     console.error('Error generating response:', error);
+    console.error('Error details:', error.message, error.stack);
     return '⚠️ Sorry, I encountered an error. Please try again.';
   }
 };
