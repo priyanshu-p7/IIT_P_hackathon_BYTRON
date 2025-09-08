@@ -1,13 +1,86 @@
-import React, { useState } from 'react';
-import { Search, ChevronDown, User } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Search, User, ChevronDown } from 'lucide-react';
 
-const Header = ({ selectedLanguage, onLanguageChange }) => {
-  const [showProfileMenu, setShowProfileMenu] = useState(false);
+const languages = [
+  { code: 'en', label: 'English' },
+  { code: 'hi', label: 'Hindi' },
+  { code: 'bho', label: 'Bhojpuri' },
+  { code: 'mr', label: 'Marathi' },
+  { code: 'te', label: 'Telugu' },
+  { code: 'bn', label: 'Bengali' },
+  { code: 'kn', label: 'Kannada' },
+  { code: 'gu', label: 'Gujarati' },
+  { code: 'ta', label: 'Tamil' },
+  { code: 'ml', label: 'Malayalam' },
+  { code: 'pa', label: 'Punjabi' },
+  { code: 'ur', label: 'Urdu' },
+];
 
-  const languages = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese'];
+const Header = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState('Hindi');
+  const [showLangDropdown, setShowLangDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    // Inject Google Translate script
+    const addGoogleTranslateScript = () => {
+      if (!document.getElementById('google-translate-script')) {
+        const script = document.createElement('script');
+        script.id = 'google-translate-script';
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.body.appendChild(script);
+      }
+    };
+
+    // Initialize Google Translate
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: 'en',
+          includedLanguages: languages.map((l) => l.code).join(','),
+          layout: window.google.translate.TranslateElement.InlineLayout.HORIZONTAL
+        },
+        'google_translate_element'
+      );
+
+      // Auto-select Hindi initially
+      setTimeout(() => {
+        const select = document.querySelector('select.goog-te-combo');
+        if (select) {
+          select.value = 'hi';
+          select.dispatchEvent(new Event('change'));
+        }
+      }, 1000);
+    };
+
+    addGoogleTranslateScript();
+
+    // Close dropdown when clicking outside
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowLangDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const changeLanguage = (lang) => {
+    const select = document.querySelector('select.goog-te-combo');
+    if (select) {
+      select.value = lang.code;
+      select.dispatchEvent(new Event('change'));
+      setSelectedLanguage(lang.label);
+      setShowLangDropdown(false);
+    }
+  };
 
   return (
     <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 shadow-sm">
+
       {/* Search Bar */}
       <div className="flex-1 max-w-2xl">
         <div className="relative">
@@ -22,28 +95,25 @@ const Header = ({ selectedLanguage, onLanguageChange }) => {
 
       {/* Right Section */}
       <div className="flex items-center space-x-4">
-        {/* Language Switcher */}
-        <div className="relative">
+        {/* Custom Google Translate Dropdown */}
+        <div className="relative" ref={dropdownRef}>
           <button
-            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            onClick={() => setShowLangDropdown(!showLangDropdown)}
             className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
           >
             <span className="text-sm font-medium">{selectedLanguage}</span>
             <ChevronDown className="w-4 h-4 text-gray-500" />
           </button>
-          
-          {showProfileMenu && (
-            <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+
+          {showLangDropdown && (
+            <div className="absolute right-0 mt-2 w-40 z-100 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
               {languages.map((lang) => (
                 <button
-                  key={lang}
-                  onClick={() => {
-                    onLanguageChange(lang);
-                    setShowProfileMenu(false);
-                  }}
+                  key={lang.code}
+                  onClick={() => changeLanguage(lang)}
                   className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg"
                 >
-                  {lang}
+                  {lang.label}
                 </button>
               ))}
             </div>
@@ -57,6 +127,29 @@ const Header = ({ selectedLanguage, onLanguageChange }) => {
           </button>
         </div>
       </div>
+
+      {/* Hidden Google Translate Widget */}
+      <div id="google_translate_element" style={{ display: 'none' }}></div>
+
+      {/* Custom CSS for Google Translate */}
+      <style jsx>{`
+  .goog-te-banner-frame.skiptranslate {
+    display: none !important;
+  }
+  body {
+    top: 0px !important;
+    position: static !important;
+  }
+  .goog-te-gadget-icon {
+    display: none !important;
+  }
+  iframe[src*="translate.google.com"] {
+    display: none !important;
+  }
+    .VIpgJd-ZVi9od-ORHb{
+    display: none !important;
+}
+`}</style>
     </header>
   );
 };

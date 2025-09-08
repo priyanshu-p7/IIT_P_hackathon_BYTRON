@@ -3,12 +3,12 @@ import { Home, MessageCircle, Map, Heart, User, Settings, AlertTriangle } from '
 
 const Sidebar = ({ activeSection, onSectionChange }) => {
   const navItems = [
-    { id: 'home', icon: Home, label: 'Home' },
-    { id: 'chat', icon: MessageCircle, label: 'Chat' },
-    { id: 'map', icon: Map, label: 'Map' },
-    { id: 'favorites', icon: Heart, label: 'Favorites' },
-    { id: 'profile', icon: User, label: 'Profile' },
-    { id: 'settings', icon: Settings, label: 'Settings' },
+    { id: 'home', icon: Home, label: 'Home', href: '/' },
+    { id: 'chat', icon: MessageCircle, label: 'Chat', href: '/app' },
+    { id: 'map', icon: Map, label: 'Map', href: '/map' },
+    { id: 'favorites', icon: Heart, label: 'Favorites', href: '/fav' },
+    { id: 'profile', icon: User, label: 'Profile', href: '/profile' },
+    { id: 'settings', icon: Settings, label: 'Settings', href: '/settings' },
   ];
 
   return (
@@ -27,8 +27,9 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
           const isActive = activeSection === item.id;
           
           return (
-            <button
+            <a
               key={item.id}
+              href={item.href}
               onClick={() => onSectionChange(item.id)}
               className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 group relative ${
                 isActive
@@ -42,7 +43,7 @@ const Sidebar = ({ activeSection, onSectionChange }) => {
               <div className="absolute left-16 bg-gray-900 text-white px-2 py-1 rounded text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                 {item.label}
               </div>
-            </button>
+            </a>
           );
         })}
       </nav>

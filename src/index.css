@@ -2,3 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hide the Google Translate top banner */
+.goog-te-banner-frame.skiptranslate {
+    display: none !important;
+}
+
+/* Remove the space it reserves at the top */
+body {
+    top: 0px !important;
+    position: static !important;
+}
+
+/* Optional: hide the Google translate “gadget” icon if any */
+.goog-te-gadget-icon {
+    display: none !important;
+}
+
+/* Optional: hide the Google Translate floating iframe */
+iframe[src*="translate.google.com"] {
+    display: none !important;
+}
+
+.VIpgJd-ZVi9od-ORHb{
+    display: none !important;
+}

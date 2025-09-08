@@ -63,7 +63,7 @@ const MapPanel = ({ recommendations }) => {
   const defaultCenter = [48.8566, 2.3522];
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full z-[70] bg-white">
       {/* Filter Bar */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between mb-4">

@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// Components
 import Sidebar from "./components/Sidebar.jsx";
 import Header from "./components/Header.jsx";
 import ChatPanel from "./components/ChatPanel.jsx";
 import MapPanel from "./components/MapPanel.jsx";
 import Footer from "./components/Footer.jsx";
+import LandingPage from "./pages/LandingPage.jsx";
 
-function App() {
+function Dashboard() {
   const [activeSection, setActiveSection] = useState("chat");
   const [selectedLanguage, setSelectedLanguage] = useState("English");
-
-  // 🔹 Shared state for AI recommendations
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState([]); // shared state
 
   return (
     <div className="h-screen flex bg-gray-50">
@@ -34,7 +36,7 @@ function App() {
           <div className="w-1/2 border-r border-gray-200">
             <ChatPanel
               selectedLanguage={selectedLanguage}
-              onRecommendations={setRecommendations} // 🔹 update from chat
+              onRecommendations={setRecommendations}
             />
           </div>
 
@@ -48,6 +50,20 @@ function App() {
         <Footer />
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Landing page */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Dashboard */}
+        <Route path="/app" element={<Dashboard />} />
+      </Routes>
+    </Router>
   );
 }
 
