@@ -5,7 +5,12 @@ import { Mic, Volume2 } from "lucide-react";
 
 
 const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      sender: "ai",
+      text: "👋 Hi there! I'm your travel guide assistant. Ask me about attractions, restaurants, hotels, or emergencies, and I'll help you out with suggestions!"
+    }
+  ]);
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [recognition, setRecognition] = useState(null);
