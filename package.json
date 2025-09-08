@@ -1,5 +1,4 @@
 {
-  "homepage": "https://priyanshu-p7.github.io/IIT_P_hackathon_BYTRON/",
   "name": "vite-react-javascript-starter",
   "private": true,
   "version": "0.0.0",
@@ -8,9 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@google/generative-ai": "^0.21.0",
