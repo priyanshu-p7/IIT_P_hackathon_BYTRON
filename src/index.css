@@ -26,3 +26,22 @@ iframe[src*="translate.google.com"] {
 .VIpgJd-ZVi9od-ORHb{
     display: none !important;
 }
+
+
+/* ✅ Kill Google Translate banner, tooltips, iframes */
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-tooltip,
+#goog-gt-tt {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+}
+
+body {
+    top: 0px !important;
+    position: static !important;
+}

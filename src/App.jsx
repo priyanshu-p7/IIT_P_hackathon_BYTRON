@@ -41,7 +41,7 @@ function Dashboard() {
           </div>
 
           {/* Right Panel - Map & Recommendations */}
-          <div className="w-1/2">
+          <div className="w-1/2 z-1">
             <MapPanel recommendations={recommendations} />
           </div>
         </div>

@@ -17,9 +17,18 @@ const languages = [
 ];
 
 const Header = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState('Hindi');
+  const [selectedLanguage, setSelectedLanguage] = useState('English');
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const banner = document.querySelector(".goog-te-banner-frame");
+      if (banner) banner.remove();
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, [selectedLanguage, setSelectedLanguage]);
 
   useEffect(() => {
     // Inject Google Translate script
@@ -31,6 +40,9 @@ const Header = () => {
         document.body.appendChild(script);
       }
     };
+
+    
+    
 
     // Initialize Google Translate
     window.googleTranslateElementInit = () => {
@@ -47,7 +59,7 @@ const Header = () => {
       setTimeout(() => {
         const select = document.querySelector('select.goog-te-combo');
         if (select) {
-          select.value = 'hi';
+          select.value = 'en';
           select.dispatchEvent(new Event('change'));
         }
       }, 1000);
@@ -94,9 +106,9 @@ const Header = () => {
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center z-40 space-x-4">
         {/* Custom Google Translate Dropdown */}
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative z-40" ref={dropdownRef}>
           <button
             onClick={() => setShowLangDropdown(!showLangDropdown)}
             className="flex items-center space-x-2 px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
@@ -133,23 +145,30 @@ const Header = () => {
 
       {/* Custom CSS for Google Translate */}
       <style jsx>{`
-  .goog-te-banner-frame.skiptranslate {
-    display: none !important;
-  }
-  body {
-    top: 0px !important;
-    position: static !important;
-  }
-  .goog-te-gadget-icon {
-    display: none !important;
-  }
-  iframe[src*="translate.google.com"] {
-    display: none !important;
-  }
-    .VIpgJd-ZVi9od-ORHb{
-    display: none !important;
-}
-`}</style>
+        .goog-te-banner-frame.skiptranslate {
+          display: none !important;
+        }
+        .goog-te-banner-frame {
+          display: none !important;
+        }
+        body {
+          top: 0px !important;
+          position: static !important;
+        }
+        .goog-te-gadget-icon {
+          display: none !important;
+        }
+        iframe[src*="translate.google.com"] {
+          display: none !important;
+        }
+        .VIpgJd-ZVi9od-ORHb {
+          display: none !important;
+        }
+        #goog-gt-tt, .goog-tooltip, .goog-te-balloon-frame {
+          display: none !important;
+        }
+      `}</style>
+
     </header>
   );
 };

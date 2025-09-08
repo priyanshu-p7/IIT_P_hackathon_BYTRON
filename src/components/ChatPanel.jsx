@@ -4,7 +4,12 @@ import ReactMarkdown from "react-markdown";
 
 
 const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      sender: "ai",
+      text: "👋 Hi there! I'm your travel guide assistant. Ask me about attractions, restaurants, hotels, or emergencies, and I'll help you out with suggestions!"
+    }
+  ]);
   const [input, setInput] = useState("");
 
   const handleSend = async () => {
@@ -12,6 +17,7 @@ const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
 
     const newMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, newMessage]);
+    setInput("");
 
     try {
       // 🔹 Ask Gemini for places
@@ -22,7 +28,8 @@ const ChatPanel = ({ selectedLanguage, onRecommendations }) => {
         // 🔹 Send places to App -> MapPanel
         onRecommendations(places);
 
-
+        console.log(places);
+        
         // 🔹 Add AI confirmation message
         if(places.length > 0){
           setMessages((prev) => [

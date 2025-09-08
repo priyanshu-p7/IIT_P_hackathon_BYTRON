@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = "AIzaSyDeS0dATpxLCK_46HT8xCo6o1mVP1kfGvs";
+const API_KEY = "AIzaSyBI-z35fI6sO8RdVz06klE7PCZMAtZA9Hg";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 let CHAT_HISTORY = [];
@@ -23,19 +23,21 @@ export const generateBotFullResponse = async (userMessage) => {
       - name (string)
       - description (string, max 2 sentences)
       - rating (number 1.0 - 5.0)
-      - image (string, valid image URL)
+      - image (string, valid image URL from internet)
       - category (one of: "Attractions", "Food", "Stay", "Emergency")
+      - url of google maps page of that place
       - position (array: [latitude, longitude])
 
       User's message: "${userMessage}"
       Chat history: ${JSON.stringify(CHAT_HISTORY, null, 2)}
-
       
     `;
 
-    console.log(CHAT_HISTORY);
+    // console.log(CHAT_HISTORY);
+
     
-    const jsonResult = await model.generateContent(jsonPrompt);
+    
+    const jsonResult = await model.generateContent(jsonPrompt);    
     let rawText = jsonResult.response.text().trim();
     rawText = rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
 
