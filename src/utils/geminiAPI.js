@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const API_KEY = "AIzaSyBI-z35fI6sO8RdVz06klE7PCZMAtZA9Hg";
+// const API_KEY = "AIzaSyDeS0dATpxLCK_46HT8xCo6o1mVP1kfGvs";
+const API_KEY = "AIzaSyDIV5wl0VFuFglXSyGymWobVTA6jIqc7Aw";
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 let CHAT_HISTORY = [];
