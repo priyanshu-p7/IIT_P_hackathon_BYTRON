@@ -55,7 +55,7 @@ function Dashboard() {
 
 function App() {
   return (
-    <Router>
+    <Router basename="/IIT_P_hackathon_BYTRON">
       <Routes>
         {/* Landing page */}
         <Route path="/" element={<LandingPage />} />
